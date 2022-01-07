@@ -18,6 +18,7 @@ import jp.co.sample.service.TblMemberService;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
+import mockit.Verifications;
 
 @ExtendWith(SpringExtension.class)
 //@ContextConfiguration(locations = {"file:src/test/ApplicationContext.xml"})
@@ -67,6 +68,14 @@ public class TblMemberControllerTest {
 		
 		//Execute - テスト実行
 		String actual = sut.detail("1", this.model);
+		
+		//Verify - モック記録（findById呼出回数チェック）
+		new Verifications() {{
+//			tblMemberMapper.findById("5"); //テスト失敗
+			tblMemberMapper.findById("1"); //テスト成功
+//			times = 2; //テスト失敗
+			times = 1; //テスト成功
+		}};
 		
 		//Verify - 表示するhtmlファイル検証
 		String expected = "tblMember/detail";

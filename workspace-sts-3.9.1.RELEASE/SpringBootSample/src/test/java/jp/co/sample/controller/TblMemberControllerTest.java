@@ -56,6 +56,21 @@ public class TblMemberControllerTest {
 		fail("まだ実装されていません");
 	}
 
+	
+	@Test
+	public void testExperiment() {
+		
+		//モックによる書き換え
+		
+		//Execute - テスト実行
+		String actual = this.sut.experiment();
+		
+		//Verify - 検証
+		String expected = "fail";
+		assertThat(actual, is(expected));
+	}
+	
+	@Disabled
 	@Test
 	public void testDetail() {
 		

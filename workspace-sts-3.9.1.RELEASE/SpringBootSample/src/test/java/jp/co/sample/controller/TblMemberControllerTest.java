@@ -18,6 +18,8 @@ import jp.co.sample.mapper.TblMemberMapper;
 import jp.co.sample.service.TblMemberService;
 import mockit.Expectations;
 import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Tested;
 import mockit.Verifications;
 
@@ -65,7 +67,18 @@ public class TblMemberControllerTest {
 			tblMember.setMemberName("TestUser");
 			result = tblMember;
 		}};
-		
+
+//		//Mapperがインターフェースのため失敗するものの、動作自体は上のnew Expectations()と同じになる。
+//		//SetUp - 事前処理
+//		new MockUp<TblMemberMapper>() {
+//			@Mock
+//			TblMember findById(String id) {
+//				TblMember tblMember = new TblMember();
+//				tblMember.setMemberId(id);
+//				tblMember.setMemberName("TestUser");
+//				return tblMember;
+//			}
+//		};
 		
 		//Execute - テスト実行
 		String actualString = this.sut.detail("1", this.model);

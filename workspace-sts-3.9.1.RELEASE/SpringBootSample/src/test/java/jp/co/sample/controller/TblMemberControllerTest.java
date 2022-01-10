@@ -50,6 +50,9 @@ public class TblMemberControllerTest {
 	@Injectable //@Mocked
 	private Model model;
 	
+	@Injectable
+	TestPrivateMethod testPrivateMethod;
+	
 	@Disabled
 	@Test
 	public void testList() {
@@ -61,16 +64,30 @@ public class TblMemberControllerTest {
 	public void testExperiment() {
 		
 		//モックによる書き換え
+		//Expectations()とMockUp<>()、どちらもprivateメソッドの場合は失敗する。
+//		new MockUp<TestPrivateMethod>() {
+//			@Mock
+//			public String returnFail() {
+//				return "success";
+//			}
+//		};
+//		new Expectations() {{
+//			testPrivateMethod.returnFail();
+//			result = "success"
+//		}};
+		
+		//reflectionを利用してprivateメソッドをスタブ化
 		
 		//Execute - テスト実行
 		String actual = this.sut.experiment();
 		
 		//Verify - 検証
 		String expected = "fail";
+//		String expected = "success";
 		assertThat(actual, is(expected));
+	
 	}
 	
-	@Disabled
 	@Test
 	public void testDetail() {
 		
@@ -82,10 +99,13 @@ public class TblMemberControllerTest {
 			tblMember.setMemberName("TestUser");
 			result = tblMember;
 		}};
-
-//		//Mapperがインターフェースのため失敗するものの、動作自体は上のnew Expectations()と同じになる。
-//		//SetUp - 事前処理
-//		new MockUp<TblMemberMapper>() {
+		//↑
+		//上はモック化したインスタンスのメソッド定義
+		//従って、上の場合はフィールドか、テストメソッドの引数に@Mockedか@Injectableが必要。
+		//下は実体があるインスタンスのメソッドを上書き
+		//↓
+		//SetUp - 事前処理
+//		new MockUp<TblMemberService>() {
 //			@Mock
 //			TblMember findById(String id) {
 //				TblMember tblMember = new TblMember();

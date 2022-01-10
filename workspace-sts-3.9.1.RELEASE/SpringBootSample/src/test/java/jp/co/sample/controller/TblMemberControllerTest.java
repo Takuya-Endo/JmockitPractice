@@ -16,10 +16,9 @@ import jp.co.sample.mapper.MstPlaceMapper;
 import jp.co.sample.mapper.MstPositionMapper;
 import jp.co.sample.mapper.TblMemberMapper;
 import jp.co.sample.service.TblMemberService;
+import mockit.Delegate;
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Mock;
-import mockit.MockUp;
 import mockit.Tested;
 import mockit.Verifications;
 
@@ -50,8 +49,8 @@ public class TblMemberControllerTest {
 	@Injectable //@Mocked
 	private Model model;
 	
-	@Injectable
-	TestPrivateMethod testPrivateMethod;
+//	@Injectable
+//	TestPrivateMethod testPrivateMethod;
 	
 	@Disabled
 	@Test
@@ -59,9 +58,9 @@ public class TblMemberControllerTest {
 		fail("まだ実装されていません");
 	}
 
-	
+	@Disabled
 	@Test
-	public void testExperiment() {
+	public void testExperiment() throws Exception {
 		
 		//モックによる書き換え
 		//Expectations()とMockUp<>()、どちらもprivateメソッドの場合は失敗する。
@@ -73,17 +72,28 @@ public class TblMemberControllerTest {
 //		};
 //		new Expectations() {{
 //			testPrivateMethod.returnFail();
-//			result = "success"
+//			result = "success";
 //		}};
 		
 		//reflectionを利用してprivateメソッドをスタブ化
+//		TestPrivateMethod testPrivateMethod = new TestPrivateMethod();
+//		Method returnFailMethod = TestPrivateMethod.class.getDeclaredMethod("returnFail");
+//		returnFailMethod.setAccessible(true);
+//		new Expectations() {{
+//			String testString1 = (String) returnFailMethod.invoke(testPrivateMethod);
+//			System.out.println(testString1);
+//			result = "success";
+//			String testString2 = (String) returnFailMethod.invoke(testPrivateMethod);
+//			System.out.println(testString2);
+//		}};
+		
 		
 		//Execute - テスト実行
 		String actual = this.sut.experiment();
 		
 		//Verify - 検証
-		String expected = "fail";
-//		String expected = "success";
+//		String expected = "fail";
+		String expected = "success";
 		assertThat(actual, is(expected));
 	
 	}
@@ -91,14 +101,14 @@ public class TblMemberControllerTest {
 	@Test
 	public void testDetail() {
 		
-		//SetUp - 事前処理
-		new Expectations() {{
-			tblMemberMapper.findById("1");
-			TblMember tblMember = new TblMember();
-			tblMember.setMemberId("1");
-			tblMember.setMemberName("TestUser");
-			result = tblMember;
-		}};
+//		//SetUp - 事前処理
+//		new Expectations() {{
+//			tblMemberMapper.findById("1");
+//			TblMember tblMember = new TblMember();
+//			tblMember.setMemberId("1");
+//			tblMember.setMemberName("TestUser");
+//			result = tblMember;
+//		}};
 		//↑
 		//上はモック化したインスタンスのメソッド定義
 		//従って、上の場合はフィールドか、テストメソッドの引数に@Mockedか@Injectableが必要。
@@ -114,6 +124,40 @@ public class TblMemberControllerTest {
 //				return tblMember;
 //			}
 //		};
+
+		
+		//SetUp - 事前処理
+		new Expectations() {{
+			//"1"など特定の値を入れる場合はこれで良い
+			//anyString等も可
+//			tblMemberMapper.findById("1");
+//			TblMember tblMember = new TblMember();
+//			tblMember.setMemberId("1");
+//			tblMember.setMemberName("TestUser");
+//			result = tblMember;
+			//↓
+			//しかし、実行時に実際受け取った値を使用する時は、
+			//下のようにanyStringを使用すると、
+			//ランダムな値が入り、受け取った値が使えない。
+//			tblMemberMapper.findById(anyString);
+//			TblMember tblMember = new TblMember();
+//			tblMember.setMemberId(anyString);
+//			tblMember.setMemberName("TestUser");
+//			result = tblMember;
+			//↓
+			//そこで、任意の値を入れたい場合は、new Delegate()を使う。
+			tblMemberMapper.findById(anyString);
+			result = new Delegate() {
+//				TblMember dummy(String str) { //Overrideしてるわけではないので、欲しい値を返せば、実際メソッド名は問わない。
+				TblMember findById(String str) {
+					TblMember tblMember = new TblMember();
+					tblMember.setMemberId(str);
+					tblMember.setMemberName("TestUser");
+					return tblMember;
+				}
+			};
+			
+		}};
 		
 		//Execute - テスト実行
 		String actualString = this.sut.detail("1", this.model);

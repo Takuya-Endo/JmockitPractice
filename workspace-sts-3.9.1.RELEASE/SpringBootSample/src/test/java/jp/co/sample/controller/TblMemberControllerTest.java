@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.lang.reflect.Method;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,9 +60,27 @@ public class TblMemberControllerTest {
 		fail("まだ実装されていません");
 	}
 
+	@Test
+	public void testExperiment2() throws Exception {
+		
+		//publicメソッド呼び出しテスト
+		TestPrivateMethod testPrivateMethod = new TestPrivateMethod();
+		String actual1 = testPrivateMethod.returnString();
+		String expected1 = "fail";
+		assertThat(actual1, is(expected1));
+		
+		//privateメソッド呼び出しテスト
+		Method returnFailMethod = TestPrivateMethod.class.getDeclaredMethod("returnFail");
+		returnFailMethod.setAccessible(true);
+		String actual2 = (String) returnFailMethod.invoke(testPrivateMethod);
+		String expected2 = "fail";
+		assertThat(actual2, is(expected2));
+		
+	}
+	
 	@Disabled
 	@Test
-	public void testExperiment() throws Exception {
+	public void testExperiment1() throws Exception {
 		
 		//モックによる書き換え
 		//Expectations()とMockUp<>()、どちらもprivateメソッドの場合は失敗する。
@@ -98,6 +118,7 @@ public class TblMemberControllerTest {
 	
 	}
 	
+	@Disabled
 	@Test
 	public void testDetail() {
 		

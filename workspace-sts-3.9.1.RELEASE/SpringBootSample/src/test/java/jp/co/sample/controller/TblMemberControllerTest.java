@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.Disabled;
@@ -21,6 +22,8 @@ import jp.co.sample.service.TblMemberService;
 import mockit.Delegate;
 import mockit.Expectations;
 import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Tested;
 import mockit.Verifications;
 
@@ -60,6 +63,38 @@ public class TblMemberControllerTest {
 		fail("まだ実装されていません");
 	}
 
+	@Test
+	public void testExperiment3() throws Exception {
+		
+		TestPrivateMethod testPrivateMethod = new TestPrivateMethod();
+		Method returnFailMethod = TestPrivateMethod.class.getDeclaredMethod("returnFail");
+		returnFailMethod.setAccessible(true);
+		
+		//privateメソッドのモック化
+		new MockUp<Method>() {
+			@Mock
+//			public Object invoke(Object obj, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			public Object invoke(Object obj) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+				return "success";
+			}
+		};
+		
+		//publicメソッドのモック化
+		new Expectations() {{
+			testPrivateMethod.returnString();
+			Method returnFailMethod = TestPrivateMethod.class.getDeclaredMethod("returnFail");
+			returnFailMethod.setAccessible(true);
+			result = (String) returnFailMethod.invoke(testPrivateMethod);
+		}};
+		
+		//publicメソッド呼び出しテスト
+		String actual1 = testPrivateMethod.returnString();
+		String expected1 = "success";
+		assertThat(actual1, is(expected1));
+		
+	}
+	
+	@Disabled
 	@Test
 	public void testExperiment2() throws Exception {
 		

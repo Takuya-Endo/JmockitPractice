@@ -70,6 +70,9 @@ public class TblMemberControllerTest {
 		Method returnFailMethod = TestPrivateMethod.class.getDeclaredMethod("returnFail");
 		returnFailMethod.setAccessible(true);
 		
+		//private,staticメソッド対応要検証
+		//protectedは可？
+		
 		//privateメソッドのモック化
 		new MockUp<Method>() {
 			@Mock

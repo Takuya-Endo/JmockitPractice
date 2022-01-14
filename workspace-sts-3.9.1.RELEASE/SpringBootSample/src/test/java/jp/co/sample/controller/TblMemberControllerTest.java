@@ -73,6 +73,8 @@ public class TblMemberControllerTest {
 		//private,staticメソッド対応要検証
 		//protectedは可？
 		
+		//new Mockup<>()において、throwsの追加は可能
+		
 		//privateメソッドのモック化
 		new MockUp<Method>() {
 			@Mock

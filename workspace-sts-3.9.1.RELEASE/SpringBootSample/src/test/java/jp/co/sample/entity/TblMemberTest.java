@@ -734,24 +734,24 @@ class TblMemberTest {
 	}
 	
 
-	@Test
-	void testEqualsCanEqual() {
-		new MockUp<TblMember>() {
-			@Mock
-			public boolean canEqual(final Object other) {
-				return false;
-			}
-		};
-		boolean actual = this.sut.equals(compared);
-		boolean expected = false;
-		
-		Assert.assertThat(actual, is(expected));
-	}
-	@Test
-	void testCanEqual() {
-		boolean actual = this.sut.canEqual(new Object());
-		boolean expected = false;
-		Assert.assertThat(actual, is(expected));
-	}
+//	@Test
+//	void testEqualsCanEqual() {
+//		new MockUp<TblMember>() {
+//			@Mock
+//			public boolean canEqual(final Object other) {
+//				return false;
+//			}
+//		};
+//		boolean actual = this.sut.equals(compared);
+//		boolean expected = false;
+//		
+//		Assert.assertThat(actual, is(expected));
+//	}
+//	@Test
+//	void testCanEqual() {
+//		boolean actual = this.sut.canEqual(new Object());
+//		boolean expected = false;
+//		Assert.assertThat(actual, is(expected));
+//	}
 	
 }

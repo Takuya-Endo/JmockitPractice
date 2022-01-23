@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -755,6 +756,7 @@ class TblMemberTest {
 	}
 
 	
+//	@Disabled
 	@Test
 	void testTblMember238行目_01() {
 		this.sut.setAgeLower(null);	
@@ -762,9 +764,27 @@ class TblMemberTest {
 		boolean expected = false;
 		Assert.assertThat(actual, is(expected));
 	}
+//	@Disabled
 	@Test
 	void testTblMember238行目_02() {
+		this.sut.setAgeLower(null);	
+		this.compared.setAgeLower(null);
+		boolean actual = this.sut.equals(compared);
+		boolean expected = false;
+		Assert.assertThat(actual, is(expected));
+	}
+	@Disabled
+	@Test
+	void testTblMember238行目_03() {
 		this.sut.setAgeLower(1);	
+		boolean actual = this.sut.equals(compared);
+		boolean expected = false;
+		Assert.assertThat(actual, is(expected));
+	}
+	@Disabled
+	@Test
+	void testTblMember238行目_04() {
+		this.sut.setAgeLower(2);	
 		boolean actual = this.sut.equals(compared);
 		boolean expected = false;
 		Assert.assertThat(actual, is(expected));

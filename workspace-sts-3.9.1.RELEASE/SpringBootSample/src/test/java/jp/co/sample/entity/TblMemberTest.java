@@ -734,24 +734,40 @@ class TblMemberTest {
 	}
 	
 
-//	@Test
-//	void testEqualsCanEqual() {
-//		new MockUp<TblMember>() {
-//			@Mock
-//			public boolean canEqual(final Object other) {
-//				return false;
-//			}
-//		};
-//		boolean actual = this.sut.equals(compared);
-//		boolean expected = false;
-//		
-//		Assert.assertThat(actual, is(expected));
-//	}
-//	@Test
-//	void testCanEqual() {
-//		boolean actual = this.sut.canEqual(new Object());
-//		boolean expected = false;
-//		Assert.assertThat(actual, is(expected));
-//	}
+	@Test
+	void testEqualsCanEqual() {
+		new MockUp<TblMember>() {
+			@Mock
+			public boolean canEqual(final Object other) {
+				return false;
+			}
+		};
+		boolean actual = this.sut.equals(compared);
+		boolean expected = false;
+		
+		Assert.assertThat(actual, is(expected));
+	}
+	@Test
+	void testCanEqual() {
+		boolean actual = this.sut.canEqual(new Object());
+		boolean expected = false;
+		Assert.assertThat(actual, is(expected));
+	}
+
+	
+	@Test
+	void testTblMember238行目_01() {
+		this.sut.setAgeLower(null);	
+		boolean actual = this.sut.equals(compared);
+		boolean expected = false;
+		Assert.assertThat(actual, is(expected));
+	}
+	@Test
+	void testTblMember238行目_02() {
+		this.sut.setAgeLower(1);	
+		boolean actual = this.sut.equals(compared);
+		boolean expected = false;
+		Assert.assertThat(actual, is(expected));
+	}
 	
 }

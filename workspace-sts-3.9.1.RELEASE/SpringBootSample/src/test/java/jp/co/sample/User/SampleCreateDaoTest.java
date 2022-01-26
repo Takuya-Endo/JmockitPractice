@@ -13,7 +13,7 @@ class SampleCreateDaoTest {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		new SampleCreateDao().createDao();
 	}
 
 }
